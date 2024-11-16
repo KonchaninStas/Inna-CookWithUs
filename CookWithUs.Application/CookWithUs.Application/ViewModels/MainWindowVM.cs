@@ -17,7 +17,6 @@ namespace CookWithUs.Application.ViewModels
             _allResipes = new List<RecipeVM>(RecipesReader.GetAllRecipes().Select(r => new RecipeVM(RequestDisplayStarChanged, r)));
 
             Recipes = new ObservableCollection<RecipeVM>();
-            SearchKeywords = "цибуля";
         }
 
         [ObservableProperty]
