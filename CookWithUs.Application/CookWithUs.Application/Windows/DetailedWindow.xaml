@@ -8,7 +8,7 @@
     xmlns:viewmodels="clr-namespace:CookWithUs.Application.ViewModels.DataStructures"
     Title="Готуй із нами"
     Width="1000"
-    Height="600"
+    Height="800"
     d:DataContext="{d:DesignInstance Type=viewmodels:RecipeVM,
                                      IsDesignTimeCreatable=False}"
     FontFamily="Comic Sans MS"
@@ -29,8 +29,8 @@
         </Grid.RowDefinitions>
         <TextBlock
             HorizontalAlignment="Center"
-            FontSize="22"
-            FontWeight="Bold"
+            FontSize="36"
+            FontWeight="ExtraBold"
             Text="{Binding Title}" />
         <Image
             Grid.Row="1"
@@ -44,7 +44,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <GroupBox Header="Ingredients">
+                <GroupBox Header="Інгредієнти">
                     <ItemsControl Margin="40,0,0,0" ItemsSource="{Binding Ingredients}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -60,7 +60,7 @@
                 <GroupBox
                     Grid.Row="1"
                     Padding="0,10,0,10"
-                    Header="Details">
+                    Header="Спосіб приготування">
                     <ItemsControl
                         Grid.Row="3"
                         Margin="40,0,0,0"

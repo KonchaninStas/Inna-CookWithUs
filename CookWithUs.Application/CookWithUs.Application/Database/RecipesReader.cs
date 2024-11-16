@@ -1,4 +1,5 @@
 ﻿using CookWithUs.Application.Entities;
+using CookWithUs.Application.ViewModels.DataStructures;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -26,11 +27,13 @@ namespace CookWithUs.Application.Database
 
                             recipes.Add(new FoodRecipe
                             {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 Tilte = reader.GetString(reader.GetOrdinal("Title")),
                                 Type = reader.GetString(reader.GetOrdinal("Type")),
                                 DescriptionSteps = GetDescriptionSteps(reader),
                                 Ingredients = GetIngredients(reader),
-                                Image = LoadImageFromBytes(reader.GetFieldValue<byte[]>(reader.GetOrdinal("Image")))
+                                Image = LoadImageFromBytes(reader.GetFieldValue<byte[]>(reader.GetOrdinal("Image"))),
+                                IsStar = reader.GetBoolean(reader.GetOrdinal("IsStar"))
                             });
                         }
                     }
@@ -38,6 +41,22 @@ namespace CookWithUs.Application.Database
             }
 
             return recipes;
+        }
+
+        public static void SetStar(FoodRecipe foodRecipe)
+        {
+            int isStar = foodRecipe.IsStar ? 1 : 0;
+            using (var connection = new SQLiteConnection($"Data Source={PathToDatabaseFile}"))
+            {
+                connection.Open();
+                string sql = $"UPDATE FoodRecipes SET IsStar = @IsStar WHERE Id = @Id";
+                using (var command = new SQLiteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@IsStar", isStar);
+                    command.Parameters.AddWithValue("@Id", foodRecipe.Id);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         private static string[] GetIngredients(SQLiteDataReader reader)

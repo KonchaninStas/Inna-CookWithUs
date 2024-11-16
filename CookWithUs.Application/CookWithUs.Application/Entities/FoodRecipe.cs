@@ -4,6 +4,7 @@ namespace CookWithUs.Application.Entities
 {
     internal class FoodRecipe
     {
+        public int Id { get; init; }
         public required string Tilte { get; init; }
 
         public required IReadOnlyCollection<string> Ingredients { get; init; }
@@ -13,5 +14,7 @@ namespace CookWithUs.Application.Entities
         public required BitmapImage Image { get; init; }
 
         public required string Type { get; init; }
+
+        public bool IsStar { get; set; }
     }
 }

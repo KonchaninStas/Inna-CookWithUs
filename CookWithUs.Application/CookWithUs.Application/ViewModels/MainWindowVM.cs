@@ -7,14 +7,14 @@ using System.Collections.ObjectModel;
 
 namespace CookWithUs.Application.ViewModels
 {
-    internal partial class MainWindowVM : ObservableObject
+    internal partial class MainWindowVM : ObservableRecipient
     {
 
         private readonly List<RecipeVM> _allResipes;
 
         public MainWindowVM()
         {
-            _allResipes = new List<RecipeVM>(RecipesReader.GetAllRecipes().Select(r => new RecipeVM(r)));
+            _allResipes = new List<RecipeVM>(RecipesReader.GetAllRecipes().Select(r => new RecipeVM(RequestDisplayStarChanged, r)));
 
             Recipes = new ObservableCollection<RecipeVM>();
             SearchKeywords = "цибуля";
@@ -32,7 +32,8 @@ namespace CookWithUs.Application.ViewModels
             }
         }
 
-        public ObservableCollection<RecipeVM> Recipes { get; }
+        [ObservableProperty]
+        private ObservableCollection<RecipeVM> _recipes;
 
         [RelayCommand(CanExecute = nameof(IsSearchEnabled))]
         private void Search()
@@ -58,11 +59,45 @@ namespace CookWithUs.Application.ViewModels
         {
             IReadOnlyCollection<RecipesGroupVM> enumerable = _allResipes.GroupBy(r => r.FoodRecipe.Type).
                 Select(g => new RecipesGroupVM(g.Key, g)).ToArray();
-            
+
             new AllRecipesWindow
             {
                 DataContext = enumerable,
             }.ShowDialog();
+        }
+
+        [RelayCommand(CanExecute = nameof(IsDisplayStarEnabled))]
+        private void DisplayStarRecipes()
+        {
+            try
+            {
+                _allResipes.ForEach(r => r.CanStarBeChanged = false);
+                IReadOnlyCollection<RecipesGroupVM> enumerable = _allResipes.Where(r => r.IsStar).GroupBy(r => r.FoodRecipe.Type).
+                    Select(g => new RecipesGroupVM(g.Key, g)).ToArray();
+
+                new AllRecipesWindow
+                {
+                    DataContext = enumerable,
+                }.ShowDialog();
+            }
+            finally
+            {
+                _allResipes.ForEach(r => r.CanStarBeChanged = true);
+            }
+        }
+
+        private bool IsDisplayStarEnabled()
+        {
+            return _allResipes.Any(r => r.IsStar);
+        }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(DisplayStarRecipesCommand))]
+        private bool _requestStar;
+
+        private void RequestDisplayStarChanged()
+        {
+            RequestStar = !RequestStar;
         }
     }
 }

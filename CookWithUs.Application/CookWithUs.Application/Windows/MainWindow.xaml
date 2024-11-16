@@ -8,7 +8,7 @@
     xmlns:viewmodels="clr-namespace:CookWithUs.Application.ViewModels"
     Title="Готуй із нами"
     Width="1000"
-    Height="600"
+    Height="800"
     d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowVM,
                                      IsDesignTimeCreatable=False}"
     FontFamily="Comic Sans MS"
@@ -52,12 +52,21 @@
             FontSize="40"
             FontWeight="Bold"
             Text="Готуй із нами" />
-        <Button
+        <StackPanel
             Grid.Column="1"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Command="{Binding DisplayAllCommand}"
-            Content="Усі рецепти" />
+            Orientation="Vertical">
+            <Button
+                Width="110"
+                Command="{Binding DisplayAllCommand}"
+                Content="Усі рецепти" />
+            <Button
+                Width="110"
+                Command="{Binding DisplayStarRecipesCommand}"
+                Content="Вибрані рецепти" />
+        </StackPanel>
+
         <TextBox
             Grid.Row="1"
             Margin="0,10,0,10"
@@ -66,6 +75,7 @@
         <Button
             Grid.Row="1"
             Grid.Column="1"
+            Width="110"
             Command="{Binding SearchCommand}"
             Content="Пошук"
             IsDefault="True" />
@@ -78,11 +88,7 @@
             Grid.Row="3"
             Grid.ColumnSpan="2"
             VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Recipes}">
-                <ItemsControl.ItemTemplate>
-                   
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ItemsControl ItemTemplate="{StaticResource RecipeBlock}" ItemsSource="{Binding Recipes}" />
         </ScrollViewer>
     </Grid>
 </Window>

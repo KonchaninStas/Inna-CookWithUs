@@ -1,21 +1,31 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CookWithUs.Application.Database;
 using CookWithUs.Application.Entities;
 using CookWithUs.Application.Windows;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace CookWithUs.Application.ViewModels.DataStructures
 {
-    internal partial class RecipeVM : ObservableObject
+    internal partial class RecipeVM : ObservableRecipient
     {
+        private readonly Action _isStarChanged;
         private readonly FoodRecipe _foodRecipe;
-        public RecipeVM(FoodRecipe foodRecipe)
+
+        public RecipeVM(Action isStarChanged, FoodRecipe foodRecipe)
         {
+            _isStarChanged = isStarChanged;
             _foodRecipe = foodRecipe;
 
             Ingredients = new ObservableCollection<string>(foodRecipe.Ingredients);
+            IsStar = foodRecipe.IsStar;
+            CanStarBeChanged = true;
         }
+
+        [ObservableProperty]
+        private bool _canStarBeChanged;
 
         public string Title => FoodRecipe.Tilte;
 
@@ -26,6 +36,16 @@ namespace CookWithUs.Application.ViewModels.DataStructures
         public ObservableCollection<string> Ingredients { get; }
 
         public FoodRecipe FoodRecipe => _foodRecipe;
+
+        [ObservableProperty]
+        private bool _isStar;
+
+        partial void OnIsStarChanged(bool value)
+        {
+            _foodRecipe.IsStar = value;
+            RecipesReader.SetStar(_foodRecipe);
+            _isStarChanged();
+        }
 
         public bool CanBeDisplayed(string keywords)
         {

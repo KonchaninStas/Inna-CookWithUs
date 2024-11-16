@@ -8,7 +8,7 @@
     xmlns:viewmodels="clr-namespace:CookWithUs.Application.ViewModels.DataStructures"
     Title="Готуй із нами"
     Width="1000"
-    Height="600"
+    Height="800"
     FontFamily="Comic Sans MS"
     FontSize="22"
     WindowStartupLocation="CenterScreen"
@@ -17,41 +17,8 @@
         <ItemsControl Margin="0,0,20,0" ItemsSource="{Binding}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander Header="{Binding Title}">
-                        <ItemsControl ItemsSource="{Binding Recipes}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="0,10,0,0"
-                                        Background="#fcc49d"
-                                        BorderBrush="Black"
-                                        BorderThickness="2">
-                                        <Grid Margin="0,0,10,0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Image
-                                                Width="130"
-                                                Height="100"
-                                                Source="{Binding Image}"
-                                                Stretch="UniformToFill" />
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                Margin="50,0,0,0"
-                                                VerticalAlignment="Center"
-                                                FontSize="26"
-                                                Text="{Binding Title}" />
-                                            <Button
-                                                Grid.Column="2"
-                                                Command="{Binding OpenDetailedWindowCommand}"
-                                                Content="Переглянути" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                    <Expander Header="{Binding Title}" Margin="0,20,0,0">
+                        <ItemsControl ItemTemplate="{StaticResource RecipeBlock}" ItemsSource="{Binding Recipes}" />
                     </Expander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
