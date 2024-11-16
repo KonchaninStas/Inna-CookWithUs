@@ -6,18 +6,77 @@
     StartupUri="/Windows/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="ValidationErrorBrush" Color="#f44336" />
+            <SolidColorBrush x:Key="BlueColor" Color="#4D9DE3" />
+            <SolidColorBrush x:Key="LightBlueColor" Color="#FFC6DFF4" />
+            <SolidColorBrush x:Key="WhiteColor" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="GrayColor" Color="#FFBDBDBD" />
+            <SolidColorBrush x:Key="BlackColor" Color="#1B1A1A" />
+            <SolidColorBrush x:Key="WarningIconBrushColor" Color="#FFDC5A61" />
+            <SolidColorBrush x:Key="CheckBoxDisabled" Color="#FFBDBDBD" />
+            <SolidColorBrush x:Key="CheckBoxOff" Color="#89000000" />
+            <SolidColorBrush x:Key="BorderBrushLightGrayColor" Color="#DDDDDD" />
+            <SolidColorBrush x:Key="BorderBrushGrayColor" Color="#CCCCCC" />
+            <SolidColorBrush x:Key="BorderBrushBlueColor" Color="#4D9DE3" />
+            <SolidColorBrush x:Key="ToggleButtonForeground" Color="#A5A5A5" />
+
+            <LinearGradientBrush x:Key="RedColorPickerBrush" StartPoint="0,0" EndPoint="1,0">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="Black" />
+                    <GradientStop Offset="1" Color="Red" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="GreenColorPickerBrush" StartPoint="0,0" EndPoint="1,0">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="Black" />
+                    <GradientStop Offset="1" Color="Green" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="BlueColorPickerBrush" StartPoint="0,0" EndPoint="1,0">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="Black" />
+                    <GradientStop Offset="1" Color="Blue" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <Style TargetType="Button">
+            <Style x:Key="ControlButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="Width" Value="100" />
                 <Setter Property="Margin" Value="10,0,10,0" />
+                <Setter Property="MinWidth" Value="98.55" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="27" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Background" Value="{StaticResource BlueColor}" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderBrush" Value="{StaticResource BlueColor}" />
+                <Setter Property="Foreground" Value="{StaticResource WhiteColor}" />
+                <Setter Property="FontFamily" Value="Comic Sans MS" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Padding" Value="5,2,5,2" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                <Style.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="2" />
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Style.Resources>
             </Style>
-            <Style TargetType="Window">
-                <Setter Property="FontSize" Value="16" />
-            </Style>
+
+            <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
+
             <Style TargetType="Expander">
-                <Setter Property="IsExpanded" Value="True"/>
+                <Setter Property="IsExpanded" Value="True" />
+            </Style>
+            <Style TargetType="GroupBox">
+                <Setter Property="Margin" Value="0,0,20,0" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

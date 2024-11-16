@@ -6,13 +6,14 @@
     xmlns:local="clr-namespace:CookWithUs.Application.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:CookWithUs.Application.ViewModels.DataStructures"
-    Title="DetailedWindow"
+    Title="Готуй із нами"
+    Width="1000"
+    Height="600"
     d:DataContext="{d:DesignInstance Type=viewmodels:RecipeVM,
                                      IsDesignTimeCreatable=False}"
-    d:Height="450"
-    d:Width="800"
+    FontFamily="Comic Sans MS"
+    FontSize="22"
     WindowStartupLocation="CenterScreen"
-    WindowState="Maximized"
     mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="TextBlock">
@@ -43,7 +44,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Expander Header="Ingredients">
+                <GroupBox Header="Ingredients">
                     <ItemsControl Margin="40,0,0,0" ItemsSource="{Binding Ingredients}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -54,9 +55,9 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </Expander>
+                </GroupBox>
 
-                <Expander
+                <GroupBox
                     Grid.Row="1"
                     Padding="0,10,0,10"
                     Header="Details">
@@ -85,7 +86,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </Expander>
+                </GroupBox>
             </Grid>
         </ScrollViewer>
     </Grid>

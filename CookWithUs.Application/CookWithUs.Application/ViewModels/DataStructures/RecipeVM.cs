@@ -31,7 +31,14 @@ namespace CookWithUs.Application.ViewModels.DataStructures
         {
             var keywordsCollection = keywords.Split(' ');
 
-            return Ingredients.Any(i => keywordsCollection.Any(k => i.Contains(k, StringComparison.OrdinalIgnoreCase)));
+            foreach (var keyword in keywordsCollection)
+            {
+                if (!Ingredients.Any(i => i.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         [RelayCommand]
