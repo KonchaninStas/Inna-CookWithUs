@@ -9,12 +9,14 @@
     Title="AllRecipesWindow"
     d:Height="450"
     d:Width="800"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
     mc:Ignorable="d">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander Header="{Binding Title}">
+                    <Expander Header="{Binding Title}" Style="{StaticResource LightSettingsExpanderStyle}">
                         <ItemsControl ItemsSource="{Binding Recipes}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
