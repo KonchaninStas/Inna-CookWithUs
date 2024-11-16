@@ -23,18 +23,15 @@ namespace CookWithUs.Application.Database
                     {
                         while (reader.Read())
                         {
-                            var ingredients = reader.GetString(reader.GetOrdinal("Ingredients"));
-                            var x = reader.GetFieldValue<byte[]>(reader.GetOrdinal("Image"));
-                         
 
-
-                            //recipes.Add(new FoodRecipe
-                            //{
-                            //    Tilte = reader.GetString(reader.GetOrdinal("Title")),
-                            //    Description = reader.GetString(reader.GetOrdinal("Description")),
-                            //    Ingredients = ingredients,
-                            //    Image = LoadImageFromBytes(bytBLOB)
-                            //});
+                            recipes.Add(new FoodRecipe
+                            {
+                                Tilte = reader.GetString(reader.GetOrdinal("Title")),
+                                Type = reader.GetString(reader.GetOrdinal("Type")),
+                                DescriptionSteps = GetDescriptionSteps(reader),
+                                Ingredients = GetIngredients(reader),
+                                Image = LoadImageFromBytes(reader.GetFieldValue<byte[]>(reader.GetOrdinal("Image")))
+                            });
                         }
                     }
                 }
@@ -43,6 +40,47 @@ namespace CookWithUs.Application.Database
             return recipes;
         }
 
+        private static string[] GetIngredients(SQLiteDataReader reader)
+        {
+            return reader.GetString(
+                reader.GetOrdinal("Ingredients")).
+                Split(Environment.NewLine).
+                Where(r => !string.IsNullOrEmpty(r)).
+                ToArray();
+        }
+
+        private static List<DescriptionStep> GetDescriptionSteps(SQLiteDataReader reader)
+        {
+            var result = new List<DescriptionStep>();
+
+            string description = reader.GetString(reader.GetOrdinal("Description"));
+            string[] steps = description.Split(Environment.NewLine);
+
+            string stepTitle = string.Empty;
+            string stepDescription = string.Empty;
+
+            foreach (string step in steps)
+            {
+                if (step.Contains("Крок"))
+                {
+                    if (!string.IsNullOrEmpty(stepTitle))
+                    {
+                        result.Add(new DescriptionStep(stepTitle, stepDescription));
+
+                        stepTitle = string.Empty;
+                        stepDescription = string.Empty;
+                    }
+
+                    stepTitle += step;
+                }
+                else
+                {
+                    stepDescription += step;
+                }
+            }
+
+            return result;
+        }
 
         private static BitmapImage LoadImageFromBytes(byte[] imageData)
         {
