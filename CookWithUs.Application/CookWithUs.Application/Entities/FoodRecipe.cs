@@ -15,6 +15,6 @@ namespace CookWithUs.Application.Entities
 
         public required string Type { get; init; }
 
-        public bool IsStar { get; set; }
+        public bool IsStar { get; init; }
     }
 }
