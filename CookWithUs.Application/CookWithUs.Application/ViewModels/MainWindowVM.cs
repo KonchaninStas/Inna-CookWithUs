@@ -1,102 +1,73 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CookWithUs.Application.Database;
 using CookWithUs.Application.ViewModels.DataStructures;
 using CookWithUs.Application.Windows;
-using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace CookWithUs.Application.ViewModels
 {
-    internal partial class MainWindowVM : ObservableRecipient
+    internal partial class MainWindowVM : ObservableObject
     {
-
-        private readonly List<RecipeVM> _allResipes;
+        private readonly MainControl _mainControl;
+        private readonly Stack<UserControl> _displayedControls;
 
         public MainWindowVM()
         {
-            _allResipes = new List<RecipeVM>(RecipesReader.GetAllRecipes().Select(r => new RecipeVM(RequestDisplayStarChanged, r)));
+            _mainControl = new MainControl()
+            {
+                DataContext = new MainControlVM(this)
+            };
 
-            Recipes = new ObservableCollection<RecipeVM>();
+            _displayedControls = new Stack<UserControl>();
+            _displayedControls.Push(_mainControl);
+            Refresh();
         }
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SearchCommand))]
-        private string _searchKeywords;
-
-        partial void OnSearchKeywordsChanged(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                Recipes.Clear();
-            }
-        }
+        [NotifyCanExecuteChangedFor(nameof(BackCommand))]
+        private UserControl _displayedControl;
 
         [ObservableProperty]
-        private ObservableCollection<RecipeVM> _recipes;
+        private bool _isBackEnabled;
 
-        [RelayCommand(CanExecute = nameof(IsSearchEnabled))]
-        private void Search()
+        [RelayCommand()]
+        private void Back()
         {
-            Recipes.Clear();
+            _displayedControls.Pop();
+            Refresh();
+        }
 
-            foreach (RecipeVM recipe in _allResipes)
+        public void DisplayAll(IReadOnlyCollection<RecipesGroupVM> recipes)
+        {
+            _displayedControls.Push(new AllRecipesControl
             {
-                if (recipe.CanBeDisplayed(SearchKeywords))
-                {
-                    Recipes.Add(recipe);
-                }
-            }
+                DataContext = recipes,
+            });
+            Refresh();
         }
 
-        private bool IsSearchEnabled()
+        public void DisplayStar(IReadOnlyCollection<RecipesGroupVM> recipes)
         {
-            return SearchKeywords?.Length > 0;
-        }
-
-        [RelayCommand]
-        private void DisplayAll()
-        {
-            IReadOnlyCollection<RecipesGroupVM> enumerable = _allResipes.GroupBy(r => r.FoodRecipe.Type).
-                Select(g => new RecipesGroupVM(g.Key, g)).ToArray();
-
-            new AllRecipesWindow
+            _displayedControls.Push(new AllRecipesControl
             {
-                DataContext = enumerable,
-            }.ShowDialog();
+                DataContext = recipes,
+            });
+            Refresh();
         }
 
-        [RelayCommand(CanExecute = nameof(IsDisplayStarEnabled))]
-        private void DisplayStarRecipes()
+        public void OpenDetails(RecipeVM recipeVM)
         {
-            try
+            _displayedControls.Push(new DetailedControl
             {
-                _allResipes.ForEach(r => r.CanStarBeChanged = false);
-                IReadOnlyCollection<RecipesGroupVM> enumerable = _allResipes.Where(r => r.IsStar).GroupBy(r => r.FoodRecipe.Type).
-                    Select(g => new RecipesGroupVM(g.Key, g)).ToArray();
-
-                new AllRecipesWindow
-                {
-                    DataContext = enumerable,
-                }.ShowDialog();
-            }
-            finally
-            {
-                _allResipes.ForEach(r => r.CanStarBeChanged = true);
-            }
+                DataContext = recipeVM,
+            });
+            Refresh();
         }
 
-        private bool IsDisplayStarEnabled()
+        private void Refresh()
         {
-            return _allResipes.Any(r => r.IsStar);
-        }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(DisplayStarRecipesCommand))]
-        private bool _requestStar;
-
-        private void RequestDisplayStarChanged()
-        {
-            RequestStar = !RequestStar;
+            DisplayedControl = _displayedControls.Peek();
+            IsBackEnabled = _displayedControls.Count > 1;
         }
     }
 }

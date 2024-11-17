@@ -1,0 +1,88 @@
+﻿<UserControl
+    x:Class="CookWithUs.Application.MainControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CookWithUs.Application"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:CookWithUs.Application.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:MainControlVM,
+                                     IsDesignTimeCreatable=False}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <TextBox Background="Transparent" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="5,2,0,0"
+                                Foreground="DarkGray"
+                                IsHitTestVisible="False"
+                                Text="Введіть інгредієнти"
+                                Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="50">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,40"
+            HorizontalAlignment="Center"
+            FontSize="40"
+            FontWeight="Bold"
+            Text="Готуй із нами" />
+        <StackPanel
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Orientation="Vertical">
+            <Button
+                Width="110"
+                Command="{Binding DisplayAllCommand}"
+                Content="Усі рецепти" />
+            <Button
+                Width="110"
+                Command="{Binding DisplayStarRecipesCommand}"
+                Content="Вибрані рецепти" />
+        </StackPanel>
+
+        <TextBox
+            Grid.Row="1"
+            Margin="0,10,0,10"
+            Style="{StaticResource SearchTextBoxStyle}"
+            Text="{Binding SearchKeywords, UpdateSourceTrigger=PropertyChanged}" />
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="110"
+            Command="{Binding SearchCommand}"
+            Content="Пошук"
+            IsDefault="True" />
+        <TextBlock
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            Margin="0,20,0,10"
+            Text="Рецепти з вашими продуктами" />
+        <ScrollViewer
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemTemplate="{StaticResource RecipeBlock}" ItemsSource="{Binding Recipes}" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

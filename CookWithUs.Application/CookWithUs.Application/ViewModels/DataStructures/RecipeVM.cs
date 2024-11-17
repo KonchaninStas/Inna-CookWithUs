@@ -13,11 +13,13 @@ namespace CookWithUs.Application.ViewModels.DataStructures
     {
         private readonly Action _isStarChanged;
         private readonly FoodRecipe _foodRecipe;
+        private readonly MainWindowVM _mainWindowVM;
 
-        public RecipeVM(Action isStarChanged, FoodRecipe foodRecipe)
+        public RecipeVM(MainWindowVM mainWindowVM, Action isStarChanged, FoodRecipe foodRecipe)
         {
             _isStarChanged = isStarChanged;
             _foodRecipe = foodRecipe;
+            _mainWindowVM = mainWindowVM;
 
             Ingredients = new ObservableCollection<string>(foodRecipe.Ingredients);
             IsStar = foodRecipe.IsStar;
@@ -64,10 +66,7 @@ namespace CookWithUs.Application.ViewModels.DataStructures
         [RelayCommand]
         private void OpenDetailedWindow()
         {
-            new DetailedWindow
-            {
-                DataContext = this,
-            }.ShowDialog();
+            _mainWindowVM.OpenDetails(this);
         }
     }
 }

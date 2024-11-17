@@ -25,4 +25,13 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controls\AllRecipesControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\DetailedControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
