@@ -1,5 +1,4 @@
-﻿using CookWithUs.Application.ViewModels;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace CookWithUs.Application
 {

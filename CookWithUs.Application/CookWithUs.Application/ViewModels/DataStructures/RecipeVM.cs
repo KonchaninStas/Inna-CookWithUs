@@ -2,9 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CookWithUs.Application.Database;
 using CookWithUs.Application.Entities;
-using CookWithUs.Application.Windows;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace CookWithUs.Application.ViewModels.DataStructures

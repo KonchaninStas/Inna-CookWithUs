@@ -1,5 +1,4 @@
 ﻿using CookWithUs.Application.Entities;
-using CookWithUs.Application.ViewModels.DataStructures;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows.Media.Imaging;
